@@ -20,6 +20,6 @@ export class CustomerEditComponent implements OnInit {
       address: ['', Validators.required],
       membership: ['', Validators.required],
       id: null
-    })
+    });
   }
 }
