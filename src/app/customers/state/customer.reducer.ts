@@ -2,36 +2,11 @@ import { Customer } from '../customer.model';
 import * as customerActions from './customer.action';
 import * as fromRoot from '../../state/app-state';
 
-// const initialState = {
-//     customers: [
-//         {
-//             name: 'John Doe',
-//             phone: '3248937482374',
-//             address: '123 Sun Street',
-//             membership: 'Platinum',
-//             Id: 1
-//         }
-//     ],
-//     loading: false,
-//     loaded: true
-// };
+import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { CustomerState } from './customer.reducer';
 
-// export function customerReducer(state = initialState, action) {
-//     switch (action.type) {
-//         case LOAD_CUSTOMERS: {
-//             return {
-//                 ...state,
-//                 loading: true,
-//                 loaded: false
-//             }
-//         }
 
-//         default: {
-//             return state;
-//         }
-//     }
-// }
-
+// create Customer state interface
 export interface CustomerState {
     customers: Customer[];
     loading: boolean;
@@ -39,10 +14,12 @@ export interface CustomerState {
     error: string;
 }
 
+// append customer state into global state
 export interface AppState extends fromRoot.AppState {
     customers: CustomerState;
 }
 
+// initial customer state
 export const initialState: CustomerState = {
     customers: [],
     loading: false,
@@ -50,6 +27,8 @@ export const initialState: CustomerState = {
     error: ''
 }
 
+
+// create customer reducer
 export function customerReducer(
     state = initialState,
     action: customerActions.Action): CustomerState {
@@ -81,3 +60,28 @@ export function customerReducer(
             }
         }
 }
+
+// Selectors
+const getCustomerFeatureState = createFeatureSelector<CustomerState>(
+    'customers'
+);
+
+export const getCustomers = createSelector(
+    getCustomerFeatureState,
+    (state: CustomerState) => state.customers
+);
+
+export const getCustomersLoading = createSelector(
+    getCustomerFeatureState,
+    (state: CustomerState) => state.loading
+);
+
+export const getCustomersLoaded = createSelector(
+    getCustomerFeatureState,
+    (state: CustomerState) => state.loaded
+);
+
+export const getError = createSelector(
+    getCustomerFeatureState,
+    (state: CustomerState) => state.error
+);
