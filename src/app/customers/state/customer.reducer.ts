@@ -2,13 +2,15 @@ import { Customer } from '../customer.model';
 import * as customerActions from './customer.action';
 import * as fromRoot from '../../state/app-state';
 
+import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
+
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { CustomerState } from './customer.reducer';
 
 
 // create Customer state interface
-export interface CustomerState {
-    customers: Customer[];
+export interface CustomerState extends EntityState<Customer>{
+    selectedCustomerId: number | null;
     loading: boolean;
     loaded: boolean;
     error: string;
@@ -19,15 +21,20 @@ export interface AppState extends fromRoot.AppState {
     customers: CustomerState;
 }
 
-// initial customer state
-export const initialState: CustomerState = {
-    customers: [],
+// customer entity adapter
+export const customerAdapter: EntityAdapter<Customer> = createEntityAdapter<Customer>();
+
+export const defaultCustomer: CustomerState = {
+    ids: [],
+    entities: {},
+    selectedCustomerId: null,
     loading: false,
     loaded: false,
     error: ''
 }
 
-
+// initial customer state
+export const initialState = customerAdapter.getInitialState(defaultCustomer);
 // create customer reducer
 export function customerReducer(
     state = initialState,
@@ -40,16 +47,16 @@ export function customerReducer(
                 };
             }
             case customerActions.CustomerActionTypes.LOAD_CUSTOMERS_SUCCESS: {
-                return {
+                return customerAdapter.addAll(action.payload, {
                     ...state,
                     loading: false,
                     loaded: true,
-                    customers: action.payload
-                };
+                });
             }
             case customerActions.CustomerActionTypes.LOAD_CUSTOMERS_FAIL: {
                 return {
                     ...state,
+                    entities: {},
                     loading: false,
                     loaded: true,
                     error: action.payload
@@ -68,7 +75,7 @@ const getCustomerFeatureState = createFeatureSelector<CustomerState>(
 
 export const getCustomers = createSelector(
     getCustomerFeatureState,
-    (state: CustomerState) => state.customers
+    customerAdapter.getSelectors().selectAll
 );
 
 export const getCustomersLoading = createSelector(
