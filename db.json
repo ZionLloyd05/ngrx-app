@@ -1,18 +1,25 @@
 {
-    "customers": [
-        {
-            "name": "John Doe",
-            "phone": "3248937482374",
-            "address": "123 Sun Street",
-            "membership": "Platinum",
-            "Id": 1
-        },
-        {
-            "name": "Mary Johnson",
-            "phone": "32132432234374",
-            "address": "123 Main Voulevard",
-            "membership": "Pro",
-            "Id": 1
-        }
-    ]
+  "customers": [
+    {
+      "name": "John Doe",
+      "phone": "3248937482374",
+      "address": "123 Sun Street",
+      "membership": "Platinum",
+      "id": 1
+    },
+    {
+      "name": "Mary Johnson",
+      "phone": "32132432234374",
+      "address": "123 Main Voulevard",
+      "membership": "Basic",
+      "id": 2
+    },
+    {
+      "name": "Alagbala Damilola",
+      "phone": "08169536967",
+      "address": "18 Dominion Avenue",
+      "membership": "Pro",
+      "id": 3
+    }
+  ]
 }
